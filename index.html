@@ -474,6 +474,45 @@ a{text-decoration:none;color:inherit}
   .gate-final-planet.ring:after{width:108px;height:24px;top:24px;left:-18px}
 }
 
+
+.custom-box{
+  max-width:760px;
+  margin:auto;
+  text-align:center;
+  background:linear-gradient(180deg,#111,#070707);
+  border:1px solid rgba(212,175,55,.26);
+  border-radius:26px;
+  padding:22px 16px;
+  box-shadow:0 0 34px rgba(212,175,55,.12);
+  position:relative;
+  overflow:hidden;
+}
+.custom-box h3{color:var(--gold2);font-size:25px;margin-bottom:8px}
+.custom-box .custom-price{font-size:30px;font-weight:950;margin:10px 0;color:#fff}
+.custom-box p{color:#d7d7d7;line-height:1.9;font-size:14px}
+.payment-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.payment-card{
+  background:#0d0d0d;
+  border:1px solid rgba(212,175,55,.18);
+  border-radius:20px;
+  padding:18px 12px;
+  text-align:center;
+}
+.payment-card .pay-icon{font-size:34px;margin-bottom:8px}
+.payment-card h3{color:var(--gold2);font-size:18px;margin-bottom:6px}
+.payment-card p{color:#d1d1d1;font-size:13px;line-height:1.7}
+.policy-box{
+  margin-top:14px;
+  padding:18px 14px;
+  border-radius:22px;
+  background:radial-gradient(circle at center,rgba(212,175,55,.12),transparent 50%),#080808;
+  border:1px solid rgba(212,175,55,.18);
+  text-align:center;
+}
+.policy-box h3{color:var(--gold2);font-size:22px;margin-bottom:8px}
+.policy-box p{color:#ddd;line-height:1.9}
+@media(max-width:760px){.payment-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -564,6 +603,22 @@ a{text-decoration:none;color:inherit}
 </section>
 
 
+
+<section class="section" id="custom">
+  <div class="title">
+    <span>CUSTOM DESIGN</span>
+    <h2>باقة تصميم خاص</h2>
+  </div>
+  <div class="custom-box">
+    <h3>تصميم على فكرة الزبون</h3>
+    <div class="custom-price">السعر حسب الطلب</div>
+    <p>
+      هذه الباقة مخصصة للمشاريع التي تحتاج فكرة خاصة أو تصميم مختلف عن الباقات الأساسية.
+      يتم تحديد السعر حسب حجم العمل، عدد الأقسام، مستوى التصميم، التأثيرات المطلوبة، وطبيعة الفكرة.
+    </p>
+  </div>
+</section>
+
 <section class="section" id="guarantee">
   <div class="title">
     <span>GUARANTEE</span>
@@ -589,14 +644,57 @@ a{text-decoration:none;color:inherit}
 </section>
 
 
+
 <section class="section" id="maintenance">
-  <div class="title"><span>MAINTENANCE</span><h2>الصيانة والتحديث الشهري</h2></div>
-  <div class="guarantee-card" style="max-width:760px;margin:auto;text-align:center;">
-    <h3>اشتراك شهري ثابت</h3>
-    <div class="guarantee-time">$10 / شهر</div>
-    <p>مخصص للعملاء الذين يحتاجون تحديثات مستمرة بعد التسليم، مثل تغيير أسعار المنتجات، حذف عناصر، إضافة منتجات جديدة، أو تحديث محتوى المنيو بشكل دوري بدون طلب تصميم جديد كامل.</p>
+  <div class="title"><span>MAINTENANCE</span><h2>باقات الصيانة الشهرية</h2></div>
+  <div class="guarantee-grid">
+    <div class="guarantee-card">
+      <h3>الصيانة الأساسية</h3>
+      <div class="guarantee-time">$10 / شهر</div>
+      <p>مناسبة للتعديلات البسيطة مثل تغيير أسعار المنتجات، تعديل أسماء المنتجات، حذف أو إضافة منتجات نصية، وتحديث بيانات التواصل.</p>
+    </div>
+    <div class="guarantee-card">
+      <h3>الصيانة المتقدمة</h3>
+      <div class="guarantee-time">$20 / شهر</div>
+      <p>تشمل الصيانة الأساسية بالإضافة إلى إضافة صور جديدة، حذف أو تبديل صور المنتجات، تعديل ترتيب الأقسام، وتحديثات تصميمية بسيطة.</p>
+    </div>
+    <div class="guarantee-card">
+      <h3>ميزة مهمة</h3>
+      <div class="guarantee-time">QR ثابت</div>
+      <p>جميع تحديثات الصيانة تتم على نفس الرابط، لذلك لا يحتاج العميل إلى تغيير أو طباعة QR جديد طالما الرابط ثابت.</p>
+    </div>
   </div>
 </section>
+
+
+<section class="section" id="payment">
+  <div class="title">
+    <span>PAYMENT</span>
+    <h2>طرق الدفع وسياسة العمل</h2>
+  </div>
+  <div class="payment-grid">
+    <div class="payment-card">
+      <div class="pay-icon">💳</div>
+      <h3>Super Key</h3>
+      <p>دفع مباشر عبر سوبر كي حسب الاتفاق.</p>
+    </div>
+    <div class="payment-card">
+      <div class="pay-icon">₮</div>
+      <h3>USDT</h3>
+      <p>تحويل USDT للعملاء الذين يفضلون الدفع الرقمي.</p>
+    </div>
+    <div class="payment-card">
+      <div class="pay-icon">💵</div>
+      <h3>نقدي</h3>
+      <p>الدفع النقدي متاح حسب الموقع والاتفاق.</p>
+    </div>
+  </div>
+  <div class="policy-box">
+    <h3>سياسة الدفع</h3>
+    <p>يتم بدء العمل بعد دفع 50% من قيمة المشروع، ويتم تسليم الملفات والرابط و QR النهائي بعد إكمال الدفعة المتبقية 50%.</p>
+  </div>
+</section>
+
 <section class="section" id="faq">
   <div class="title">
     <span>FAQ</span>
@@ -632,6 +730,10 @@ a{text-decoration:none;color:inherit}
       <p>تعمل خدمات LINKO عبر الإنترنت والاستضافة الرقمية. في حال حدوث انقطاع عام بالإنترنت المحلي أو مشاكل تقنية خارج نطاق سيطرة الشركة، قد يتأثر الوصول مؤقتًا حتى عودة الخدمة. أما إذا كان الخلل من جهة ملفات أو إعدادات LINKO فنقوم بالإصلاح حسب الضمان أو خطة الصيانة.</p>
     </div>
     <div class="faq-item">
+      <h3>هل يمكن إضافة أو تغيير صور المنتجات لاحقًا؟</h3>
+      <p>نعم، يمكن إضافة صور جديدة أو تبديل الصور الحالية ضمن الصيانة المتقدمة. يتم تحديث الصور داخل نفس الرابط بدون تغيير QR.</p>
+    </div>
+    <div class="faq-item">
       <h3>لماذا أختار لينكو؟</h3>
       <p>لأننا لا نقدم صورة QR فقط، بل نقدم نظام منيو رقمي كامل بتصميم احترافي، رابط مباشر، QR ثابت، وضمان واضح يطمّن صاحب المطعم.</p>
     </div>
@@ -643,7 +745,7 @@ a{text-decoration:none;color:inherit}
   <p>ابدأ الآن مع لينكو وخلي زبائنك يفتحون المنيو بثواني عبر QR.</p>
   <div class="hero-actions">
     <a class="btn gold" href="https://wa.me/9647747184691">تواصل واتساب <span class="real-arrow">←</span></a>
-    <a class="btn dark" href="https://instagram.com/linko.menu">Instagram <span class="real-arrow">←</span></a>
+    <a class="btn dark" href="https://instagram.com/hmx-h11">Instagram <span class="real-arrow">←</span></a>
   </div>
 </section>
 
