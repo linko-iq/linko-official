@@ -55,35 +55,16 @@ html[dir="ltr"] .check{direction:ltr!important;flex-direction:row!important;text
   font-weight:850;
   box-shadow:0 0 24px rgba(212,175,55,.12);
 }
-.viewer-tools{
-  position:fixed;
-  top:12px;
-  right:12px;
-  left:12px;
-  z-index:100003;
-  display:none;
-  justify-content:space-between;
-  gap:8px;
-  pointer-events:none;
-}
-.viewer.open .viewer-tools{display:flex}
-.viewer-tools a,.viewer-tools button{
-  pointer-events:auto;
-  border:1px solid rgba(255,217,120,.38);
-  background:rgba(5,5,5,.86);
-  color:#FFD978;
-  border-radius:14px;
-  padding:10px 13px;
-  font-weight:900;
-  backdrop-filter:blur(12px);
-}
+
+.viewer.open 
+
 .model-unavailable-fix{
   display:inline-flex;
 }
 @media(max-width:680px){
   .linko-price-note{font-size:13px}
-  .viewer-tools{top:8px;right:8px;left:8px}
-  .viewer-tools a,.viewer-tools button{font-size:12px;padding:9px 10px}
+  
+  
 }
 
 </style>
@@ -149,7 +130,7 @@ html[dir="ltr"] .check{direction:ltr!important;flex-direction:row!important;text
           </div>
 
           <div class="actions">
-            <a class="btn gold" href="https://linko-iq.github.io/hussein-tast/?from=linko-models" target="_blank" rel="noopener">مشاهدة النظام</a>
+            <a class="btn gold" href="https://linko-iq.github.io/hussein-tast/" target="_blank" rel="noopener">مشاهدة النظام</a>
             <a class="btn" href="#contact">اطلب نسخة لمشروعك</a>
           </div>
         </div>
@@ -164,11 +145,7 @@ html[dir="ltr"] .check{direction:ltr!important;flex-direction:row!important;text
 <div class="panel" id="pagesPanel"><div class="card panel-card"><div class="panel-head"><h3 data-t="choose_page">اختار الصفحة</h3><button class="x" data-close>×</button></div><div class="page-grid" id="pageGrid"></div></div></div>
 <div class="panel" id="langPanel"><div class="card panel-card"><div class="panel-head"><h3 data-t="choose_lang">اختار اللغة</h3><button class="x" data-close>×</button></div><div class="lang-grid"><button data-lang="ar">العربية</button><button data-lang="en">English</button><button data-lang="fa">فارسی</button></div></div></div>
 <div class="panel" id="aiPanel"><div class="card panel-card"><div class="panel-head"><h3 data-t="ai_title">مساعد LINKO الذكي</h3><button class="x" data-close>×</button></div><div class="ai-chat"><div class="ai-answer" id="aiAnswer" data-t="ai_welcome">اختار سؤال حتى أساعدك بسرعة.</div><button data-ai="restaurant" data-t="ai_q1">أريد موقع مطعم</button><button data-ai="menu" data-t="ai_q2">أريد منيو QR</button><button data-ai="hotel" data-t="ai_q3">أريد نموذج فندق</button><button data-ai="maintenance" data-t="ai_q4">أحتاج صيانة</button><button data-ai="agent" data-t="ai_q5">أريد أصبح وكيل</button><a class="btn green" href="https://wa.me/9647747248826?text=%D8%A3%D8%B1%D9%8A%D8%AF%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%AE%D8%AF%D9%85%D8%A7%D8%AA%20LINKO" target="_blank" data-t="contact_wa">تواصل واتساب</a></div></div></div>
-<div class="viewer" id="viewer">
-  <div class="viewer-tools">
-    <button onclick="closeViewer()">← الرجوع إلى النماذج</button>
-    <a id="viewerOpenExternal" href="#" target="_blank" rel="noopener">فتح النموذج مباشرة</a>
-  </div><iframe id="viewerFrame"></iframe><button class="btn gold viewer-close" id="viewerClose" data-t="back_showcase">رجوع للنماذج</button></div>
+<div class="viewer" id="viewer"><iframe id="viewerFrame"></iframe><button class="btn gold viewer-close" id="viewerClose" data-t="back_showcase">رجوع للنماذج</button></div>
 <script>
 const WA='9647747248826';
 const MODEL_SRC={};
@@ -269,65 +246,65 @@ apply();page('home');
 
 <script>
 (function(){
-  const modelsHash = '#models';
-  window.addEventListener('message', function(){}, false);
+  let lastModelSectionId = sessionStorage.getItem('linkoLastModelSection') || 'models';
 
-  function safeSetExternal(url){
-    const a = document.getElementById('viewerOpenExternal');
-    if(a && url) a.href = url;
+  function findSectionIdFromElement(el){
+    let node = el;
+    while(node && node !== document){
+      if(node.id) return node.id;
+      if(node.classList && (node.classList.contains('cat') || node.classList.contains('section') || node.classList.contains('container'))){
+        if(!node.id){
+          node.id = 'linko-section-' + Math.random().toString(36).slice(2,8);
+        }
+        return node.id;
+      }
+      node = node.parentNode;
+    }
+    return 'models';
   }
 
-  const oldOpenViewer = window.openViewer;
-  window.openViewer = function(url){
-    safeSetExternal(url);
-    try{
-      if(typeof oldOpenViewer === 'function'){
-        oldOpenViewer(url);
-        setTimeout(function(){
-          const viewer = document.querySelector('.viewer');
-          const frame = viewer ? viewer.querySelector('iframe') : null;
-          if(frame && !frame.src) frame.src = url;
-        }, 80);
-        return;
-      }
-    }catch(e){}
-    window.open(url, '_blank', 'noopener');
-  };
+  document.addEventListener('click', function(e){
+    const trigger = e.target.closest('button,a');
+    if(!trigger) return;
+    const text = (trigger.textContent || '').trim();
+    const onclick = trigger.getAttribute('onclick') || '';
+    const href = trigger.getAttribute('href') || '';
 
-  const oldCloseViewer = window.closeViewer;
+    const isModelOpen =
+      text.includes('مشاهدة') ||
+      text.includes('النموذج') ||
+      onclick.includes('openViewer') ||
+      href.includes('github.io');
+
+    if(isModelOpen && !text.includes('العودة') && !text.includes('رجوع')){
+      const id = findSectionIdFromElement(trigger);
+      lastModelSectionId = id;
+      sessionStorage.setItem('linkoLastModelSection', id);
+    }
+  }, true);
+
+  const originalCloseViewer = window.closeViewer;
   window.closeViewer = function(){
     try{
-      if(typeof oldCloseViewer === 'function'){
-        oldCloseViewer();
-        return;
+      if(typeof originalCloseViewer === 'function'){
+        originalCloseViewer();
+      }else{
+        const viewer = document.querySelector('.viewer');
+        if(viewer) viewer.classList.remove('open');
       }
-    }catch(e){}
-    const viewer = document.querySelector('.viewer');
-    if(viewer) viewer.classList.remove('open');
-    if(location.hash !== modelsHash){
-      history.replaceState(null, '', modelsHash);
+    }catch(err){
+      const viewer = document.querySelector('.viewer');
+      if(viewer) viewer.classList.remove('open');
     }
+
+    setTimeout(function(){
+      const id = sessionStorage.getItem('linkoLastModelSection') || lastModelSectionId || 'models';
+      const target = document.getElementById(id);
+      if(target){
+        target.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    }, 80);
   };
-
-  document.addEventListener('click', function(e){
-    const a = e.target.closest('a[href]');
-    if(!a) return;
-    const href = a.getAttribute('href') || '';
-    if(href.includes('github.io') || href.includes('hussein-tast')){
-      a.setAttribute('target','_blank');
-      a.setAttribute('rel','noopener');
-    }
-  });
-
-  window.addEventListener('load', function(){
-    if(location.search.includes('from=linko-models')){
-      const back = document.createElement('a');
-      back.textContent = '← العودة إلى نماذج LINKO';
-      back.href = 'https://linko-iq.github.io/';
-      back.style.cssText = 'position:fixed;z-index:999999;right:12px;bottom:12px;background:#050505;color:#FFD978;border:1px solid rgba(255,217,120,.45);padding:12px 14px;border-radius:16px;font-weight:900;text-decoration:none;box-shadow:0 0 25px rgba(212,175,55,.22)';
-      document.body.appendChild(back);
-    }
-  });
 })();
 </script>
 
