@@ -1,47 +1,40 @@
-const CACHE_NAME = 'linko-pwa-final-v1';
+const CACHE_NAME = 'linko-pwa-v3';
 
-const APP_SHELL = [
-  './',
+const FILES_TO_CACHE = [
   './index.html',
   './manifest.webmanifest',
-
-  './icon-16.png',
-  './icon-32.png',
-  './icon-48.png',
-  './icon-72.png',
-  './icon-96.png',
-  './icon-128.png',
-  './icon-144.png',
-  './icon-152.png',
-  './icon-167.png',
-  './icon-180.png',
+  './apple-touch-icon.png',
   './icon-192.png',
-  './icon-384.png',
   './icon-512.png',
-
   './icon-maskable-192.png',
-  './icon-maskable-512.png',
-
-  './apple-touch-icon.png'
+  './icon-maskable-512.png'
 ];
 
+/* تثبيت ملفات التطبيق */
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(APP_SHELL);
+    caches.open(CACHE_NAME).then(async (cache) => {
+      for (const file of FILES_TO_CACHE) {
+        try {
+          await cache.add(file);
+        } catch (error) {
+          console.warn('تعذر تخزين الملف:', file);
+        }
+      }
     })
   );
 
   self.skipWaiting();
 });
 
+/* حذف التخزين القديم عند تحديث الموقع */
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        keys
-          .filter((key) => key !== CACHE_NAME)
-          .map((key) => caches.delete(key))
+        cacheNames
+          .filter((name) => name !== CACHE_NAME)
+          .map((name) => caches.delete(name))
       );
     })
   );
@@ -49,25 +42,29 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+/* تشغيل الصفحات من الإنترنت، والرجوع للنسخة المخزنة عند الانقطاع */
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') {
-    return;
-  }
+  if (event.request.method !== 'GET') return;
 
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
-          const responseCopy = response.clone();
+          if (response && response.status === 200) {
+            const copy = response.clone();
 
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put('./index.html', responseCopy);
-          });
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put('./index.html', copy);
+            });
+          }
 
           return response;
         })
-        .catch(() => {
-          return caches.match('./index.html');
+        .catch(async () => {
+          return (
+            (await caches.match(event.request)) ||
+            (await caches.match('./index.html'))
+          );
         })
     );
 
@@ -76,27 +73,28 @@ self.addEventListener('fetch', (event) => {
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
+      if (cachedResponse) return cachedResponse;
 
-      return fetch(event.request).then((response) => {
-        if (
-          !response ||
-          response.status !== 200 ||
-          response.type === 'opaque'
-        ) {
+      return fetch(event.request)
+        .then((response) => {
+          if (!response || response.status !== 200) {
+            return response;
+          }
+
+          const copy = response.clone();
+
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, copy);
+          });
+
           return response;
-        }
-
-        const responseCopy = response.clone();
-
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseCopy);
+        })
+        .catch(() => {
+          return new Response('Offline', {
+            status: 503,
+            statusText: 'Offline'
+          });
         });
-
-        return response;
-      });
     })
   );
 });
