@@ -1238,53 +1238,65 @@ document.addEventListener('click',e=>{
 })();
 </script>
 
-<!-- ===== LINKO Immersive Enhancements (added by Claude — safe, additive only) ===== -->
+<!-- ===== LINKO Immersive Enhancements v2 (added by Claude — safe, additive only) ===== -->
 <style>
   .lke-cursor-canvas{position:fixed;inset:0;z-index:9998;pointer-events:none;mix-blend-mode:screen;}
-  .lke-orb{position:fixed;border-radius:50%;filter:blur(60px);pointer-events:none;z-index:0;opacity:.35;will-change:transform;}
-  .lke-orb-1{width:420px;height:420px;background:radial-gradient(circle,#ffd978,transparent 70%);top:-100px;right:-100px;}
-  .lke-orb-2{width:520px;height:520px;background:radial-gradient(circle,#2997ff,transparent 70%);bottom:-160px;left:-160px;}
-  .lke-orb-3{width:340px;height:340px;background:radial-gradient(circle,#ffd978,transparent 70%);top:45%;left:60%;opacity:.2;}
 
-  .lke-curtain{
-    position:fixed;inset:0;z-index:999999;pointer-events:none;
-    display:flex;
-  }
-  .lke-curtain .panel{
-    flex:1;
-    background:linear-gradient(180deg,#0a0906,#151109 60%,#0a0906);
-    transform:scaleY(0);
-    transform-origin:top;
-    border-inline-start:1px solid rgba(255,217,120,.15);
-  }
-  .lke-curtain.lke-run .panel{ animation: lke-wipe-in .42s cubic-bezier(.7,0,.2,1) forwards; }
-  .lke-curtain.lke-out .panel{ animation: lke-wipe-out .42s cubic-bezier(.7,0,.2,1) forwards; }
-  .lke-curtain .panel:nth-child(1){animation-delay:0s;}
-  .lke-curtain .panel:nth-child(2){animation-delay:.03s;}
-  .lke-curtain .panel:nth-child(3){animation-delay:.06s;}
-  @keyframes lke-wipe-in{ from{transform:scaleY(0);transform-origin:top;} to{transform:scaleY(1);transform-origin:top;} }
-  @keyframes lke-wipe-out{ from{transform:scaleY(1);transform-origin:bottom;} to{transform:scaleY(0);transform-origin:bottom;} }
-  .lke-curtain .lke-mark{
-    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    font-family:'Cairo',system-ui,sans-serif;font-weight:900;letter-spacing:3px;
-    color:#ffd978;font-size:22px;opacity:0;
-  }
-  .lke-curtain.lke-run .lke-mark{animation:lke-mark-fade .5s ease .15s forwards;}
-  @keyframes lke-mark-fade{0%{opacity:0;}50%{opacity:1;}100%{opacity:0;}}
+  .lke-orb{position:fixed;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0;will-change:transform;}
+  .lke-orb-1{width:480px;height:480px;background:radial-gradient(circle,#ffd978,transparent 70%);top:-140px;right:-120px;opacity:.4;animation:lke-float-a 14s ease-in-out infinite;}
+  .lke-orb-2{width:560px;height:560px;background:radial-gradient(circle,#2997ff,transparent 70%);bottom:-180px;left:-180px;opacity:.38;animation:lke-float-b 18s ease-in-out infinite;}
+  .lke-orb-3{width:380px;height:380px;background:radial-gradient(circle,#ff7a45,transparent 70%);top:40%;left:55%;opacity:.22;animation:lke-float-c 16s ease-in-out infinite;}
+  @keyframes lke-float-a{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-60px,50px) scale(1.15);}}
+  @keyframes lke-float-b{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(70px,-40px) scale(1.1);}}
+  @keyframes lke-float-c{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-40px,-60px) scale(1.2);}}
 
-  /* Livelier view entrance (overrides only the animation of .view.active, structure untouched) */
-  .view.active{ animation: lke-view-in .55s cubic-bezier(.16,1,.3,1) !important; }
+  /* ---- Portal transition ---- */
+  .lke-portal{
+    position:fixed;top:0;left:0;width:60px;height:60px;border-radius:50%;
+    background:
+      radial-gradient(circle at 35% 30%, #fff6da, #ffd978 30%, #2997ff 65%, #0a0906 100%);
+    transform:translate(-50%,-50%) scale(0);
+    z-index:999999;pointer-events:none;
+    box-shadow:0 0 120px 40px rgba(255,217,120,.35);
+  }
+  .lke-portal.lke-grow{ animation: lke-portal-grow .62s cubic-bezier(.65,0,.35,1) forwards; }
+  .lke-portal.lke-shrink{ animation: lke-portal-shrink .62s cubic-bezier(.65,0,.35,1) forwards; }
+  @keyframes lke-portal-grow{ from{transform:translate(-50%,-50%) scale(0);} to{transform:translate(-50%,-50%) scale(60);} }
+  @keyframes lke-portal-shrink{ from{transform:translate(-50%,-50%) scale(60);} to{transform:translate(-50%,-50%) scale(0);} }
+
+  .lke-portal-mark{
+    position:fixed;z-index:1000000;pointer-events:none;
+    top:50%;left:50%;transform:translate(-50%,-50%) scale(.4);
+    font-family:'Cairo',system-ui,sans-serif;font-weight:900;letter-spacing:4px;
+    color:#0a0906;font-size:26px;opacity:0;
+  }
+  .lke-portal-mark.lke-show{ animation: lke-mark-pop .62s ease forwards; }
+  @keyframes lke-mark-pop{ 0%{opacity:0;transform:translate(-50%,-50%) scale(.3);} 45%{opacity:1;transform:translate(-50%,-50%) scale(1);} 100%{opacity:0;transform:translate(-50%,-50%) scale(1.3);} }
+
+  /* Dramatic view entrance */
+  .view.active{ animation: lke-view-in .7s cubic-bezier(.16,1,.3,1) !important; transform-style:preserve-3d; }
   @keyframes lke-view-in{
-    0%{ opacity:0; transform:translateY(22px) scale(.985); filter:blur(6px); }
-    100%{ opacity:1; transform:translateY(0) scale(1); filter:blur(0); }
+    0%{ opacity:0; transform:perspective(1200px) rotateX(8deg) translateY(50px) scale(.94); filter:blur(10px) saturate(1.4); }
+    60%{ filter:blur(0) saturate(1.1); }
+    100%{ opacity:1; transform:perspective(1200px) rotateX(0) translateY(0) scale(1); filter:blur(0) saturate(1); }
   }
 
-  .lke-magnetic{ transition: transform .25s cubic-bezier(.2,.9,.3,1); will-change:transform; }
+  .lke-magnetic{ transition: transform .22s cubic-bezier(.2,.9,.3,1); will-change:transform; position:relative; }
+
+  .lke-ripple{
+    position:fixed;border-radius:50%;pointer-events:none;z-index:99997;
+    border:2px solid rgba(255,217,120,.9);
+    transform:translate(-50%,-50%) scale(0);
+    animation: lke-ripple-out .7s ease-out forwards;
+  }
+  @keyframes lke-ripple-out{ from{transform:translate(-50%,-50%) scale(0);opacity:1;} to{transform:translate(-50%,-50%) scale(9);opacity:0;} }
+
+  #home .hero-card{ transition: transform .12s ease-out; transform-style:preserve-3d; will-change:transform; }
 
   @media (prefers-reduced-motion: reduce){
-    .lke-orb, .lke-cursor-canvas{ display:none !important; }
-    .view.active{ animation: none !important; }
-    .lke-curtain{ display:none !important; }
+    .lke-orb, .lke-cursor-canvas, .lke-portal, .lke-portal-mark, .lke-ripple{ display:none !important; }
+    .view.active{ animation:none !important; }
+    #home .hero-card{ transform:none !important; }
   }
 </style>
 
@@ -1292,10 +1304,8 @@ document.addEventListener('click',e=>{
 <div class="lke-orb lke-orb-2"></div>
 <div class="lke-orb lke-orb-3"></div>
 <canvas class="lke-cursor-canvas" id="lkeCursorCanvas"></canvas>
-<div class="lke-curtain" id="lkeCurtain">
-  <div class="panel"></div><div class="panel"></div><div class="panel"></div>
-  <div class="lke-mark">LINKO</div>
-</div>
+<div class="lke-portal" id="lkePortal"></div>
+<div class="lke-portal-mark" id="lkePortalMark">LINKO</div>
 
 <script>
 (function(){
@@ -1303,109 +1313,161 @@ document.addEventListener('click',e=>{
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduced) return;
 
-  /* ---------- 1) Cursor / touch trail ---------- */
+  /* ---------- 1) Comet cursor trail (hue-cycling) ---------- */
   var canvas = document.getElementById('lkeCursorCanvas');
   var ctx = canvas.getContext('2d');
   var points = [];
+  var hue = 40;
   function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
   resize(); addEventListener('resize', resize);
 
   function addPoint(x,y){
-    points.push({x:x,y:y,life:1});
-    if(points.length>40) points.shift();
+    points.push({x:x,y:y,life:1,hue:hue});
+    hue = (hue + 2.4) % 360;
+    if(points.length>70) points.shift();
   }
-  addEventListener('pointermove', function(e){ addPoint(e.clientX, e.clientY); }, {passive:true});
+  var lastMove = 0;
+  addEventListener('pointermove', function(e){
+    var now = performance.now();
+    if(now-lastMove < 8) return;
+    lastMove = now;
+    addPoint(e.clientX, e.clientY);
+  }, {passive:true});
   addEventListener('touchmove', function(e){
     if(e.touches && e.touches[0]) addPoint(e.touches[0].clientX, e.touches[0].clientY);
   }, {passive:true});
 
-  function loop(){
+  /* click / tap sparks */
+  function spark(x,y){
+    var n = 14;
+    for(var i=0;i<n;i++){
+      var ang = (Math.PI*2*i)/n;
+      var speed = 3 + Math.random()*3;
+      points.push({
+        x:x, y:y, life:1,
+        hue:(hue+Math.random()*60)%360,
+        vx:Math.cos(ang)*speed, vy:Math.sin(ang)*speed
+      });
+    }
+  }
+  addEventListener('pointerdown', function(e){ spark(e.clientX, e.clientY); ripple(e.clientX, e.clientY); }, {passive:true});
+  addEventListener('touchstart', function(e){
+    if(e.touches && e.touches[0]) { spark(e.touches[0].clientX, e.touches[0].clientY); ripple(e.touches[0].clientX, e.touches[0].clientY); }
+  }, {passive:true});
+
+  // particle render loop (handles both trail points and click sparks, which carry velocity)
+  function loop2(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     for(var i=0;i<points.length;i++){
       var p = points[i];
-      p.life -= 0.035;
+      p.life -= 0.028;
+      if(p.vx){ p.x += p.vx; p.y += p.vy; p.vx *= 0.94; p.vy *= 0.94; }
       if(p.life<=0) continue;
-      var r = 10*p.life+2;
-      var grad = ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,r*3);
-      grad.addColorStop(0, 'rgba(255,217,120,'+(p.life*0.5)+')');
-      grad.addColorStop(0.5, 'rgba(41,151,255,'+(p.life*0.25)+')');
-      grad.addColorStop(1, 'rgba(41,151,255,0)');
-      ctx.fillStyle = grad;
+      var r = 14*p.life+3;
       ctx.beginPath();
-      ctx.arc(p.x,p.y,r*3,0,Math.PI*2);
+      ctx.fillStyle = 'hsla(' + p.hue + ',95%,65%,' + (p.life*0.55) + ')';
+      ctx.arc(p.x,p.y,r,0,Math.PI*2);
       ctx.fill();
     }
     points = points.filter(function(p){ return p.life>0; });
-    requestAnimationFrame(loop);
+    requestAnimationFrame(loop2);
   }
-  requestAnimationFrame(loop);
+  requestAnimationFrame(loop2);
 
-  /* ---------- 2) Magnetic buttons ---------- */
+  function ripple(x,y){
+    var el = document.createElement('div');
+    el.className = 'lke-ripple';
+    el.style.left = x+'px'; el.style.top = y+'px';
+    el.style.width = el.style.height = '40px';
+    document.body.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 720);
+  }
+
+  /* ---------- 2) Magnetic buttons + ripple on click ---------- */
   function initMagnetic(){
     var els = document.querySelectorAll('.btn, nav#nav button, .top-wa');
     els.forEach(function(el){
+      if(el.__lkeMag) return;
+      el.__lkeMag = true;
       el.classList.add('lke-magnetic');
       el.addEventListener('mousemove', function(e){
         var r = el.getBoundingClientRect();
         var mx = e.clientX - (r.left + r.width/2);
         var my = e.clientY - (r.top + r.height/2);
-        el.style.transform = 'translate(' + (mx*0.18) + 'px,' + (my*0.28) + 'px)';
+        el.style.transform = 'translate(' + (mx*0.22) + 'px,' + (my*0.32) + 'px)';
       });
       el.addEventListener('mouseleave', function(){ el.style.transform = 'translate(0,0)'; });
     });
   }
   initMagnetic();
-  // re-scan periodically in case buttons are injected later by app JS (e.g. dashboard renders)
-  setInterval(initMagnetic, 2500);
+  setInterval(initMagnetic, 2000);
 
-  /* ---------- 3) Ambient orb parallax on scroll ---------- */
-  var orbs = document.querySelectorAll('.lke-orb');
-  var ticking = false;
-  addEventListener('scroll', function(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      var y = window.scrollY;
-      orbs[0] && (orbs[0].style.transform = 'translateY(' + (y*0.12) + 'px)');
-      orbs[1] && (orbs[1].style.transform = 'translateY(' + (-y*0.08) + 'px)');
-      orbs[2] && (orbs[2].style.transform = 'translateY(' + (y*0.05) + 'px)');
-      ticking = false;
-    });
-  }, {passive:true});
+  /* ---------- 3) 3D tilt on hero card ---------- */
+  var hero = document.querySelector('#home .hero-card');
+  if(hero){
+    addEventListener('pointermove', function(e){
+      if(!document.getElementById('home').classList.contains('active')) return;
+      var cx = innerWidth/2, cy = innerHeight/2;
+      var rx = ((e.clientY-cy)/cy) * -6;
+      var ry = ((e.clientX-cx)/cx) * 6;
+      hero.style.transform = 'perspective(1200px) rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+    }, {passive:true});
+  }
 
-  /* ---------- 4) Page-transition curtain around the existing page(id) router ---------- */
+  /* ---------- 4) Portal page transition around existing page(id) router ---------- */
   function hookPageTransition(){
     if(typeof window.page !== 'function' || window.__lkePatched) return;
     window.__lkePatched = true;
     var original = window.page;
-    var curtain = document.getElementById('lkeCurtain');
-    window.page = function(id){
+    var portal = document.getElementById('lkePortal');
+    var mark = document.getElementById('lkePortalMark');
+
+    window.page = function(id, originEl){
       var current = document.querySelector('.view.active');
       if(current && current.id === id){ return original(id); }
-      curtain.classList.remove('lke-out');
-      curtain.classList.add('lke-run');
-      curtain.style.pointerEvents = 'auto';
+
+      var ox = innerWidth/2, oy = 90;
+      if(originEl && originEl.getBoundingClientRect){
+        var r = originEl.getBoundingClientRect();
+        ox = r.left + r.width/2; oy = r.top + r.height/2;
+      }
+      portal.style.left = ox+'px'; portal.style.top = oy+'px';
+      portal.classList.remove('lke-shrink');
+      portal.classList.add('lke-grow');
+      mark.style.left = ox+'px'; mark.style.top = oy+'px';
+      mark.classList.remove('lke-show'); void mark.offsetWidth; mark.classList.add('lke-show');
+
       setTimeout(function(){
         original(id);
-        curtain.classList.remove('lke-run');
-        curtain.classList.add('lke-out');
-        setTimeout(function(){
-          curtain.classList.remove('lke-out');
-          curtain.style.pointerEvents = 'none';
-        }, 460);
-      }, 380);
+        window.scrollTo({top:0, behavior:'auto'});
+        portal.classList.remove('lke-grow');
+        portal.classList.add('lke-shrink');
+      }, 560);
+    };
+
+    // capture which element triggered navigation so the portal originates there
+    document.addEventListener('click', function(e){
+      var btn = e.target.closest('[data-page]');
+      if(btn){
+        window.__lkeLastOrigin = btn;
+      }
+    }, true);
+
+    // wrap again to pass origin automatically for data-page buttons
+    var withOrigin = window.page;
+    window.page = function(id){
+      return withOrigin(id, window.__lkeLastOrigin);
     };
   }
   hookPageTransition();
-  // in case page() is defined slightly after this script runs, retry briefly
   var tries = 0;
   var retry = setInterval(function(){
     tries++;
-    if(window.__lkePatched || tries>20) { clearInterval(retry); return; }
+    if(window.__lkePatched || tries>20){ clearInterval(retry); return; }
     hookPageTransition();
   }, 150);
 })();
 </script>
-<!-- ===== end LINKO Immersive Enhancements ===== -->
+<!-- ===== end LINKO Immersive Enhancements v2 ===== -->
 </body>
 </html>
