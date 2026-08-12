@@ -3,41 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AURUM | عطر يحكي عنك</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+<title>VERTEX AI | ذكاء يبني القرار</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
-  :root{ --gold:#e3b869; --gold2:#f6dba2; --void:#08070a; --ink:#f5f2ea; }
+  :root{ --cyan:#4dfff0; --mag:#ff4de0; --void:#050507; --ink:#f2f5f7; }
   *{margin:0;padding:0;box-sizing:border-box;}
   html,body{background:var(--void);color:var(--ink);font-family:'Cairo',sans-serif;overflow-x:hidden;}
-  #scene-wrap{position:relative;height:600vh;}
+  #scene-wrap{position:relative;height:650vh;}
   #canvas-holder{position:sticky;top:0;height:100vh;overflow:hidden;}
   #c{position:absolute;inset:0;}
   .veil{position:absolute;inset:0;pointer-events:none;z-index:1;
-    background:radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(8,7,10,.55) 100%);}
+    background:radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(5,5,7,.7) 100%);}
+  .scan{position:absolute;inset:0;pointer-events:none;z-index:2;opacity:.05;
+    background:repeating-linear-gradient(0deg, #fff 0px, transparent 1px, transparent 3px);}
 
-  #overlay{position:absolute;inset:0;z-index:3;pointer-events:none;}
+  #overlay{position:absolute;inset:0;z-index:4;pointer-events:none;}
   .chapter{position:absolute;inset:0;display:flex;align-items:center;padding:0 8vw;opacity:0;}
-  .chapter .box{max-width:420px;}
-  .chapter.right .box{margin-inline-start:auto;text-align:end;}
-  .chapter.left .box{text-align:start;}
-  .chapter.center{justify-content:center;align-items:flex-end;padding-bottom:70px;text-align:center;}
-  .eyebrow{color:var(--gold2);font-size:11px;letter-spacing:5px;text-transform:uppercase;font-weight:700;margin-bottom:14px;}
-  .headline{font-family:'Cormorant Garamond',serif;font-weight:600;font-size:clamp(30px,5.5vw,54px);line-height:1.15;color:#fff;}
-  .headline b{color:var(--gold2);font-weight:600;}
-  .desc{margin-top:14px;font-size:14px;color:rgba(245,242,234,.7);line-height:1.9;max-width:360px;}
-  .cta-btn{display:inline-block;margin-top:26px;padding:14px 36px;border:1px solid var(--gold);color:var(--gold2);
-    font-weight:700;font-size:13px;letter-spacing:2px;text-decoration:none;border-radius:1px;pointer-events:auto;}
+  .chapter.r{justify-content:flex-end;text-align:end;}
+  .chapter.l{justify-content:flex-start;text-align:start;}
+  .chapter.c{justify-content:center;align-items:flex-end;padding-bottom:80px;text-align:center;}
+  .box{max-width:440px;}
+  .eyebrow{color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;
+    text-transform:uppercase;font-weight:700;margin-bottom:14px;}
+  .headline{font-family:'Cairo',sans-serif;font-weight:900;font-size:clamp(28px,5.5vw,52px);line-height:1.18;color:#fff;
+    position:relative;}
+  .headline b{color:var(--cyan);}
+  .headline.glitching{animation: glitchJump .35s steps(2,end) 2;}
+  .headline .g1,.headline .g2{position:absolute;top:0;right:0;left:0;color:inherit;opacity:0;}
+  .desc{margin-top:16px;font-size:14px;color:rgba(242,245,247,.65);line-height:1.9;max-width:380px;}
+  .cta-btn{display:inline-block;margin-top:26px;padding:15px 38px;background:var(--cyan);color:#03181a;
+    font-weight:900;font-size:13px;letter-spacing:1px;text-decoration:none;pointer-events:auto;border-radius:1px;}
+
+  @keyframes glitchJump{
+    0%{transform:translate(0);}
+    20%{transform:translate(-3px,2px);}
+    40%{transform:translate(3px,-2px);}
+    60%{transform:translate(-2px,-1px);}
+    80%{transform:translate(2px,1px);}
+    100%{transform:translate(0);}
+  }
 
   #brandTag{position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:20;
-    font-family:'Cormorant Garamond',serif;font-weight:600;letter-spacing:6px;font-size:16px;color:var(--gold2);}
+    font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:5px;font-size:14px;color:var(--cyan);}
   #dots{position:fixed;top:50%;left:20px;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;gap:12px;}
-  #dots .d{width:5px;height:5px;border-radius:50%;background:rgba(245,242,234,.25);transition:all .3s;}
-  #dots .d.active{background:var(--gold);height:20px;border-radius:3px;}
+  #dots .d{width:5px;height:5px;border-radius:50%;background:rgba(242,245,247,.25);transition:all .3s;}
+  #dots .d.active{background:var(--cyan);height:20px;border-radius:3px;}
   #hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:20;
-    color:rgba(245,242,234,.5);font-size:10px;letter-spacing:3px;text-transform:uppercase;transition:opacity .3s;}
+    color:rgba(242,245,247,.45);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;
+    text-transform:uppercase;transition:opacity .3s;}
+
+  #glitchOverlay{position:fixed;inset:0;z-index:30;pointer-events:none;opacity:0;}
+  #glitchOverlay.on{opacity:1;}
 
   #fallback{display:none;position:fixed;inset:0;z-index:100;background:var(--void);color:var(--ink);
     align-items:center;justify-content:center;text-align:center;padding:24px;font-size:14px;}
@@ -45,48 +64,43 @@
 </head>
 <body>
 
-<div id="brandTag">AURUM</div>
-<div id="dots"><div class="d active"></div><div class="d"></div><div class="d"></div><div class="d"></div><div class="d"></div></div>
+<div id="brandTag">VERTEX_AI</div>
+<div id="dots"><div class="d active"></div><div class="d"></div><div class="d"></div><div class="d"></div></div>
 <div id="hint">اسحب للأسفل</div>
-<div id="fallback">هذا العرض يحتاج متصفح يدعم WebGL. جرب افتحه بمتصفح حديث (Safari / Chrome).</div>
+<canvas id="glitchOverlay"></canvas>
+<div id="fallback">هذا العرض يحتاج متصفح يدعم WebGL.</div>
 
 <div id="scene-wrap">
   <div id="canvas-holder">
     <canvas id="c"></canvas>
+    <div class="scan"></div>
     <div class="veil"></div>
     <div id="overlay">
-      <div class="chapter center" id="ch0">
+      <div class="chapter c" id="ch0">
         <div class="box">
-          <div class="eyebrow">AURUM — إصدار محدود</div>
-          <h1 class="headline">عطر <b>يحكي عنك</b><br>من أول رشة</h1>
+          <div class="eyebrow">VERTEX_AI // CORE</div>
+          <h1 class="headline">ذكاء <b>يبني القرار</b><br>مو بس يجاوب</h1>
         </div>
       </div>
-      <div class="chapter right" id="ch1">
+      <div class="chapter r" id="ch1">
         <div class="box">
-          <div class="eyebrow">التفاصيل</div>
-          <h1 class="headline">غطاء <b>ذهبي فخم</b></h1>
-          <p class="desc">كل تفصيل بالزجاجة مدروس بعناية — من شكل الغطاء لثقل الزجاج بإيدك.</p>
+          <div class="eyebrow">// NEURAL NETWORK</div>
+          <h1 class="headline">شبكة <b>تتعلم</b><br>وتتطور وياك</h1>
+          <p class="desc">كل قرار يمر عبر آلاف نقاط التحليل بجزء من الثانية.</p>
         </div>
       </div>
-      <div class="chapter left" id="ch2">
+      <div class="chapter l" id="ch2">
         <div class="box">
-          <div class="eyebrow">التصميم</div>
-          <h1 class="headline">زجاج <b>يعكس الضوء</b></h1>
-          <p class="desc">شكل ينلفت له النظر من أي زاوية تحطه فيها.</p>
+          <div class="eyebrow">// DATA STREAM</div>
+          <h1 class="headline">بيانات <b>تتحول</b><br>لقرارات فورية</h1>
+          <p class="desc">معالجة حية، بدون تأخير، بدون تخمين.</p>
         </div>
       </div>
-      <div class="chapter right" id="ch3">
+      <div class="chapter c" id="ch3">
         <div class="box">
-          <div class="eyebrow">الهوية</div>
-          <h1 class="headline">تصميم <b>يميّزك</b><br>أينما كنت</h1>
-          <p class="desc">هوية بصرية تخلي منتجك يبان مختلف على الرف.</p>
-        </div>
-      </div>
-      <div class="chapter center" id="ch4">
-        <div class="box">
-          <div class="eyebrow">جرب الآن</div>
-          <h1 class="headline">AURUM<br><b>بانتظارك</b></h1>
-          <a class="cta-btn" href="#">اكتشف المجموعة</a>
+          <div class="eyebrow">// LAUNCH</div>
+          <h1 class="headline">VERTEX<br><b>بانتظارك</b></h1>
+          <a class="cta-btn" href="#">جرب الآن</a>
         </div>
       </div>
     </div>
@@ -99,153 +113,211 @@
     document.getElementById('fallback').style.display='flex';
     return;
   }
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var canvas = document.getElementById('c');
   var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:false});
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   renderer.setSize(innerWidth, innerHeight);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   var scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x08070a);
-  scene.fog = new THREE.Fog(0x08070a, 6, 14);
+  scene.background = new THREE.Color(0x050507);
+  scene.fog = new THREE.FogExp2(0x050507, 0.048);
 
-  var camera = new THREE.PerspectiveCamera(42, innerWidth/innerHeight, 0.1, 100);
+  var camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 100);
   camera.position.set(0,0,6);
 
-  /* lights */
-  scene.add(new THREE.AmbientLight(0x554433, 0.55));
-  var key = new THREE.DirectionalLight(0xffe3b0, 1.7);
-  key.position.set(3,4,4);
-  key.castShadow = true;
-  key.shadow.mapSize.set(1024,1024);
-  scene.add(key);
-  var rim = new THREE.PointLight(0x6fa8ff, 1.4, 12);
-  rim.position.set(-3,1,-3);
-  scene.add(rim);
-  var fill = new THREE.DirectionalLight(0xffffff, 0.25);
-  fill.position.set(-2,-1,3);
-  scene.add(fill);
+  scene.add(new THREE.AmbientLight(0x223344, 0.6));
+  var keyLight = new THREE.PointLight(0x4dfff0, 2, 20);
+  keyLight.position.set(2,2,4); scene.add(keyLight);
+  var magLight = new THREE.PointLight(0xff4de0, 1.6, 20);
+  magLight.position.set(-3,-1,-2); scene.add(magLight);
 
-  /* floor (reflective illusion) */
-  var floor = new THREE.Mesh(
-    new THREE.CircleGeometry(6, 48),
-    new THREE.MeshStandardMaterial({color:0x0c0a09, metalness:0.85, roughness:0.28})
-  );
-  floor.rotation.x = -Math.PI/2;
-  floor.position.y = -1.9;
-  floor.receiveShadow = true;
-  scene.add(floor);
+  var cyanMat = new THREE.LineBasicMaterial({color:0x4dfff0, transparent:true, opacity:0.85});
+  var cyanPtMat = new THREE.PointsMaterial({color:0x4dfff0, size:0.06, transparent:true, opacity:0.9});
+  var magPtMat = new THREE.PointsMaterial({color:0xff4de0, size:0.05, transparent:true, opacity:0.8});
 
-  /* ---- bottle group ---- */
-  var bottle = new THREE.Group();
+  /* ---- ENV 1: Data Core (z=0) ---- */
+  var env1 = new THREE.Group();
+  var coreGeo = new THREE.IcosahedronGeometry(1.4, 1);
+  var coreWire = new THREE.LineSegments(new THREE.EdgesGeometry(coreGeo), cyanMat);
+  env1.add(coreWire);
+  var coreInner = new THREE.Mesh(coreGeo, new THREE.MeshBasicMaterial({color:0x0a2a2a, transparent:true, opacity:0.35}));
+  env1.add(coreInner);
+  var orbitPts = [];
+  for(var i=0;i<120;i++){
+    var th = Math.random()*Math.PI*2, ph = Math.acos(2*Math.random()-1);
+    var r = 2.4 + Math.random()*0.6;
+    orbitPts.push(r*Math.sin(ph)*Math.cos(th), r*Math.sin(ph)*Math.sin(th), r*Math.cos(ph));
+  }
+  var orbitGeo = new THREE.BufferGeometry();
+  orbitGeo.setAttribute('position', new THREE.Float32BufferAttribute(orbitPts,3));
+  var orbitCloud = new THREE.Points(orbitGeo, cyanPtMat);
+  env1.add(orbitCloud);
+  env1.position.z = 0;
+  scene.add(env1);
 
-  var glassMat = new THREE.MeshPhysicalMaterial({
-    color:0x223344, transparent:true, opacity:0.38, roughness:0.05,
-    metalness:0, clearcoat:1, clearcoatRoughness:0.05
-  });
-  var goldMat = new THREE.MeshStandardMaterial({color:0xe3b869, metalness:0.9, roughness:0.22});
-  var liquidMat = new THREE.MeshPhysicalMaterial({color:0xd79a3a, transparent:true, opacity:0.55, roughness:0.15});
+  /* ---- ENV 2: Neural Network (z=-16) ---- */
+  var env2 = new THREE.Group();
+  var nodeCount = 40, nodes = [];
+  var nodePos = [];
+  for(var i=0;i<nodeCount;i++){
+    var p = new THREE.Vector3((Math.random()-.5)*6,(Math.random()-.5)*4,(Math.random()-.5)*4);
+    nodes.push(p);
+    nodePos.push(p.x,p.y,p.z);
+  }
+  var nodeGeo = new THREE.BufferGeometry();
+  nodeGeo.setAttribute('position', new THREE.Float32BufferAttribute(nodePos,3));
+  var nodeCloud = new THREE.Points(nodeGeo, cyanPtMat);
+  env2.add(nodeCloud);
+  var linePos = [];
+  for(var i=0;i<nodeCount;i++){
+    for(var j=i+1;j<nodeCount;j++){
+      if(nodes[i].distanceTo(nodes[j]) < 1.7){
+        linePos.push(nodes[i].x,nodes[i].y,nodes[i].z, nodes[j].x,nodes[j].y,nodes[j].z);
+      }
+    }
+  }
+  var lineGeo = new THREE.BufferGeometry();
+  lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePos,3));
+  var netLines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({color:0x2a6f6a, transparent:true, opacity:0.5}));
+  env2.add(netLines);
+  env2.position.z = -16;
+  scene.add(env2);
 
-  var body = new THREE.Mesh(new THREE.CylinderGeometry(0.85,0.85,2.4,40), glassMat);
-  body.castShadow = true; body.position.y = 0.1;
-  bottle.add(body);
+  /* ---- ENV 3: Data Stream (z=-32) ---- */
+  var env3 = new THREE.Group();
+  var streamCount = 260;
+  var streamPos = [];
+  var streamSpeeds = [];
+  for(var i=0;i<streamCount;i++){
+    streamPos.push((Math.random()-.5)*10, Math.random()*10-5, -32+(Math.random()-.5)*8);
+    streamSpeeds.push(0.02+Math.random()*0.05);
+  }
+  var streamGeo = new THREE.BufferGeometry();
+  streamGeo.setAttribute('position', new THREE.Float32BufferAttribute(streamPos,3));
+  var streamCloud = new THREE.Points(streamGeo, magPtMat);
+  scene.add(streamCloud);
 
-  var liquid = new THREE.Mesh(new THREE.CylinderGeometry(0.72,0.72,1.9,40), liquidMat);
-  liquid.position.y = -0.05;
-  bottle.add(liquid);
+  /* ---- ENV 4: Product panel (z=-48) ---- */
+  var env4 = new THREE.Group();
+  var panelGeo = new THREE.PlaneGeometry(3.2,1.9);
+  var panelMat = new THREE.MeshBasicMaterial({color:0x0a1a1c, transparent:true, opacity:0.55, side:THREE.DoubleSide});
+  var panel = new THREE.Mesh(panelGeo, panelMat);
+  env4.add(panel);
+  var panelEdge = new THREE.LineSegments(new THREE.EdgesGeometry(panelGeo), cyanMat);
+  env4.add(panelEdge);
+  for(var i=0;i<6;i++){
+    var g = new THREE.IcosahedronGeometry(0.14,0);
+    var m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({color: i%2? 0xff4de0:0x4dfff0}));
+    var ang = (i/6)*Math.PI*2;
+    m.position.set(Math.cos(ang)*2.2, Math.sin(ang)*1.3, 0.3);
+    env4.add(m);
+  }
+  env4.position.z = -48;
+  scene.add(env4);
 
-  var shoulder = new THREE.Mesh(new THREE.CylinderGeometry(0.32,0.85,0.4,40), glassMat);
-  shoulder.position.y = 1.5; shoulder.castShadow = true;
-  bottle.add(shoulder);
-
-  var neck = new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.32,0.35,32), glassMat);
-  neck.position.y = 1.87;
-  bottle.add(neck);
-
-  var cap = new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.46,0.75,40), goldMat);
-  cap.position.y = 2.35; cap.castShadow = true;
-  bottle.add(cap);
-
-  var capTop = new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.5,0.06,40), goldMat);
-  capTop.position.y = 2.73;
-  bottle.add(capTop);
-
-  var ringTop = new THREE.Mesh(new THREE.TorusGeometry(0.855, 0.03, 12, 40), goldMat);
-  ringTop.position.y = 1.28; ringTop.rotation.x = Math.PI/2;
-  bottle.add(ringTop);
-
-  var ringBase = new THREE.Mesh(new THREE.CylinderGeometry(0.9,0.9,0.1,40), goldMat);
-  ringBase.position.y = -1.15;
-  bottle.add(ringBase);
-
-  bottle.position.y = -0.2;
-  scene.add(bottle);
-
-  /* resize */
   function onResize(){
-    camera.aspect = innerWidth/innerHeight;
-    camera.updateProjectionMatrix();
+    camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
     renderer.setSize(innerWidth, innerHeight);
+    resizeGlitch();
   }
   addEventListener('resize', onResize);
 
-  /* camera path keyframes */
-  var path = [
-    {pos:[0, 0.1, 6],    look:[0, 0.1, 0]},
-    {pos:[2.1, 1.0, 2.6],look:[0, 1.1, 0]},
-    {pos:[-2.6, 0.2, 3.0],look:[0, 0, 0]},
-    {pos:[0.3, -0.6, 7.2],look:[0, -0.1, 0]},
-    {pos:[0, 0.15, 4.0], look:[0, 0.1, 0]}
-  ];
-  var tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3();
-  var tmpLA = new THREE.Vector3(), tmpLB = new THREE.Vector3();
+  /* ---------- glitch overlay ---------- */
+  var glitch = document.getElementById('glitchOverlay');
+  var gctx = glitch.getContext('2d');
+  function resizeGlitch(){ glitch.width = innerWidth; glitch.height = innerHeight; }
+  resizeGlitch();
+  function fireGlitch(){
+    if(reduced) return;
+    glitch.classList.add('on');
+    var frames=6, f=0;
+    var iv = setInterval(function(){
+      gctx.clearRect(0,0,glitch.width,glitch.height);
+      var blocks = 12+Math.floor(Math.random()*12);
+      for(var i=0;i<blocks;i++){
+        var w=40+Math.random()*260, h=4+Math.random()*24;
+        var x=Math.random()*glitch.width, y=Math.random()*glitch.height;
+        gctx.fillStyle = Math.random()>0.5 ? 'rgba(77,255,240,.45)' : 'rgba(255,77,224,.45)';
+        gctx.fillRect(x,y,w,h);
+      }
+      f++;
+      if(f>=frames){ clearInterval(iv); gctx.clearRect(0,0,glitch.width,glitch.height); glitch.classList.remove('on'); }
+    }, 40);
+  }
 
-  var progress = 0;
-  var idleT = 0;
+  /* ---------- scroll-driven camera flight ---------- */
+  var chapters = document.querySelectorAll('.chapter');
+  var dots = document.querySelectorAll('#dots .d');
+  var hint = document.getElementById('hint');
+  var chapterCenters = [0.08, 0.37, 0.64, 0.93];
+  var zStart = 6, zEnd = -52;
 
+  var lastChapterShown = -1;
   function applyProgress(p){
-    progress = p;
-    var scaled = p*(path.length-1);
-    var idx = Math.min(path.length-2, Math.floor(scaled));
-    var frac = scaled-idx;
-    tmpA.set.apply(tmpA, path[idx].pos);
-    tmpB.set.apply(tmpB, path[idx+1].pos);
-    tmpLA.set.apply(tmpLA, path[idx].look);
-    tmpLB.set.apply(tmpLB, path[idx+1].look);
-    camera.position.lerpVectors(tmpA, tmpB, frac);
-    var look = new THREE.Vector3().lerpVectors(tmpLA, tmpLB, frac);
-    camera.lookAt(look);
+    var z = zStart + (zEnd-zStart)*p;
+    camera.position.z = z;
+    camera.position.x = Math.sin(p*Math.PI*2.4)*0.6;
+    camera.position.y = Math.cos(p*Math.PI*1.7)*0.35;
+    camera.lookAt(camera.position.x*0.3, camera.position.y*0.3, z-6);
 
-    bottle.rotation.y = p * Math.PI * 4.4;
+    hint.style.opacity = p>0.015 ? 0 : 1;
 
-    document.getElementById('hint').style.opacity = p > 0.02 ? 0 : 1;
-    var dots = document.querySelectorAll('#dots .d');
-    dots.forEach(function(d,i){ d.classList.toggle('active', i === Math.round(scaled)); });
+    var nearest = 0, nd = 999;
+    chapterCenters.forEach(function(c,i){ var d=Math.abs(p-c); if(d<nd){nd=d; nearest=i;} });
+    dots.forEach(function(d,i){ d.classList.toggle('active', i===nearest); });
 
-    var chapters = document.querySelectorAll('.chapter');
-    chapters.forEach(function(ch, i){
-      var center = i/(chapters.length-1);
-      var dist = Math.abs(p - center);
-      var op = Math.max(0, 1 - dist*(chapters.length-1)*1.6);
+    if(nearest !== lastChapterShown){
+      fireGlitch();
+      var h = chapters[nearest].querySelector('.headline');
+      if(h){ h.classList.remove('glitching'); void h.offsetWidth; h.classList.add('glitching'); }
+      lastChapterShown = nearest;
+    }
+
+    chapters.forEach(function(ch,i){
+      var d = Math.abs(p - chapterCenters[i]);
+      var op = Math.max(0, 1 - d*7);
       ch.style.opacity = op;
     });
+
+    if(!reduced){
+      streamCloud.geometry.attributes.position.array.forEach && null;
+    }
   }
   applyProgress(0);
 
-  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
   if(window.ScrollTrigger){
     ScrollTrigger.create({
-      trigger: '#scene-wrap', start:'top top', end:'bottom bottom', scrub: 0.4,
-      onUpdate: function(self){ applyProgress(self.progress); }
+      trigger:'#scene-wrap', start:'top top', end:'bottom bottom', scrub:0.5,
+      onUpdate:function(self){ applyProgress(self.progress); }
     });
   }
 
+  var t = 0;
   function animate(){
     requestAnimationFrame(animate);
-    if(!reduced){ idleT += 0.0018; bottle.rotation.y += 0.0009; }
+    if(!reduced){
+      t += 0.01;
+      env1.rotation.y += 0.0025; env1.rotation.x += 0.001;
+      orbitCloud.rotation.y -= 0.0018;
+      env2.rotation.y += 0.0008;
+      nodeCloud.material.size = 0.06 + Math.sin(t)*0.01;
+
+      var arr = streamGeo.attributes.position.array;
+      for(var i=0;i<streamCount;i++){
+        arr[i*3+1] -= streamSpeeds[i];
+        if(arr[i*3+1] < -5){ arr[i*3+1] = 5; }
+      }
+      streamGeo.attributes.position.needsUpdate = true;
+
+      env4.rotation.y = Math.sin(t*0.3)*0.15;
+      env4.children.forEach(function(c,i){
+        if(c.geometry && c.geometry.type==='IcosahedronGeometry'){
+          c.rotation.x += 0.02; c.rotation.y += 0.015;
+        }
+      });
+    }
     renderer.render(scene, camera);
   }
   animate();
