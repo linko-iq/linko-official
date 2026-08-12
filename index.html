@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VERTEX AI | ذكاء يبني القرار</title>
+<meta name="description" content="LINKO فريق عراقي للحلول الرقمية والأنظمة التقنية: مواقع، أنظمة مخصصة، QR Menu، متاجر، هايبر ماركت، فنادق، مطاعم وحلول حسب احتياج العميل.">
+<title>LINKO | فريق حلول رقمية وأنظمة تقنية</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <style>
-  :root{ --cyan:#4dfff0; --mag:#ff4de0; --void:#050507; --ink:#f2f5f7; }
+  :root{ --gold:#e3b869; --gold2:#f6dba2; --blue:#4a8fd6; --void:#08070a; --ink:#f5f2ea; }
   *{margin:0;padding:0;box-sizing:border-box;}
   html,body{background:var(--void);color:var(--ink);font-family:'Cairo',sans-serif;overflow-x:hidden;}
+  a{color:inherit;}
   #scene-wrap{position:relative;height:650vh;}
   #canvas-holder{position:sticky;top:0;height:100vh;overflow:hidden;}
   #c{position:absolute;inset:0;}
   .veil{position:absolute;inset:0;pointer-events:none;z-index:1;
-    background:radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(5,5,7,.7) 100%);}
-  .scan{position:absolute;inset:0;pointer-events:none;z-index:2;opacity:.05;
+    background:radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(8,7,10,.72) 100%);}
+  .scan{position:absolute;inset:0;pointer-events:none;z-index:2;opacity:.04;
     background:repeating-linear-gradient(0deg, #fff 0px, transparent 1px, transparent 3px);}
 
   #overlay{position:absolute;inset:0;z-index:4;pointer-events:none;}
@@ -26,33 +26,34 @@
   .chapter.l{justify-content:flex-start;text-align:start;}
   .chapter.c{justify-content:center;align-items:flex-end;padding-bottom:80px;text-align:center;}
   .box{max-width:440px;}
-  .eyebrow{color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;
+  .eyebrow{color:var(--gold2);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;
     text-transform:uppercase;font-weight:700;margin-bottom:14px;}
   .headline{font-family:'Cairo',sans-serif;font-weight:900;font-size:clamp(28px,5.5vw,52px);line-height:1.18;color:#fff;
     position:relative;}
-  .headline b{color:var(--cyan);}
+  .headline b{color:var(--gold2);}
   .headline.glitching{animation: glitchJump .35s steps(2,end) 2;}
-  .headline .g1,.headline .g2{position:absolute;top:0;right:0;left:0;color:inherit;opacity:0;}
-  .desc{margin-top:16px;font-size:14px;color:rgba(242,245,247,.65);line-height:1.9;max-width:380px;}
-  .cta-btn{display:inline-block;margin-top:26px;padding:15px 38px;background:var(--cyan);color:#03181a;
+  .desc{margin-top:16px;font-size:14px;color:rgba(245,242,234,.68);line-height:1.9;max-width:400px;}
+  .cta-btn{display:inline-block;margin-top:26px;padding:15px 38px;background:var(--gold);color:#0a0906;
     font-weight:900;font-size:13px;letter-spacing:1px;text-decoration:none;pointer-events:auto;border-radius:1px;}
+  .stat-row{display:flex;gap:26px;margin-top:24px;flex-wrap:wrap;}
+  .stat-row div{text-align:start;}
+  .stat-row b{display:block;font-family:'Cairo',sans-serif;font-weight:900;color:var(--gold2);font-size:20px;}
+  .stat-row span{font-size:11px;color:rgba(245,242,234,.55);}
+  .chapter.c .stat-row{justify-content:center;}
+  .chapter.c .stat-row div{text-align:center;}
 
   @keyframes glitchJump{
-    0%{transform:translate(0);}
-    20%{transform:translate(-3px,2px);}
-    40%{transform:translate(3px,-2px);}
-    60%{transform:translate(-2px,-1px);}
-    80%{transform:translate(2px,1px);}
-    100%{transform:translate(0);}
+    0%{transform:translate(0);} 20%{transform:translate(-3px,2px);} 40%{transform:translate(3px,-2px);}
+    60%{transform:translate(-2px,-1px);} 80%{transform:translate(2px,1px);} 100%{transform:translate(0);}
   }
 
   #brandTag{position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:20;
-    font-family:'JetBrains Mono',monospace;font-weight:700;letter-spacing:5px;font-size:14px;color:var(--cyan);}
+    font-family:'Cairo',sans-serif;font-weight:900;letter-spacing:3px;font-size:16px;color:var(--gold2);}
   #dots{position:fixed;top:50%;left:20px;transform:translateY(-50%);z-index:20;display:flex;flex-direction:column;gap:12px;}
-  #dots .d{width:5px;height:5px;border-radius:50%;background:rgba(242,245,247,.25);transition:all .3s;}
-  #dots .d.active{background:var(--cyan);height:20px;border-radius:3px;}
+  #dots .d{width:5px;height:5px;border-radius:50%;background:rgba(245,242,234,.25);transition:all .3s;}
+  #dots .d.active{background:var(--gold);height:20px;border-radius:3px;}
   #hint{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:20;
-    color:rgba(242,245,247,.45);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;
+    color:rgba(245,242,234,.45);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;
     text-transform:uppercase;transition:opacity .3s;}
 
   #glitchOverlay{position:fixed;inset:0;z-index:30;pointer-events:none;opacity:0;}
@@ -64,7 +65,7 @@
 </head>
 <body>
 
-<div id="brandTag">VERTEX_AI</div>
+<div id="brandTag">LINKO</div>
 <div id="dots"><div class="d active"></div><div class="d"></div><div class="d"></div><div class="d"></div></div>
 <div id="hint">اسحب للأسفل</div>
 <canvas id="glitchOverlay"></canvas>
@@ -78,29 +79,35 @@
     <div id="overlay">
       <div class="chapter c" id="ch0">
         <div class="box">
-          <div class="eyebrow">VERTEX_AI // CORE</div>
-          <h1 class="headline">ذكاء <b>يبني القرار</b><br>مو بس يجاوب</h1>
+          <div class="eyebrow">LINKO // حلول QR Menu ومواقع ذكية في العراق</div>
+          <h1 class="headline">نحوّل مشروعك<br><b>إلى تجربة رقمية فاخرة</b></h1>
         </div>
       </div>
       <div class="chapter r" id="ch1">
         <div class="box">
-          <div class="eyebrow">// NEURAL NETWORK</div>
-          <h1 class="headline">شبكة <b>تتعلم</b><br>وتتطور وياك</h1>
-          <p class="desc">كل قرار يمر عبر آلاف نقاط التحليل بجزء من الثانية.</p>
+          <div class="eyebrow">// خدماتنا</div>
+          <h1 class="headline">كل شي يحتاجه<br><b>مشروعك رقمياً</b></h1>
+          <p class="desc">مواقع، أنظمة مخصصة، QR Menu، متاجر، هايبر ماركت — كل شي مبني على مقاسك.</p>
         </div>
       </div>
       <div class="chapter l" id="ch2">
         <div class="box">
-          <div class="eyebrow">// DATA STREAM</div>
-          <h1 class="headline">بيانات <b>تتحول</b><br>لقرارات فورية</h1>
-          <p class="desc">معالجة حية، بدون تأخير، بدون تخمين.</p>
+          <div class="eyebrow">// القطاعات</div>
+          <h1 class="headline">نشتغل بيها<br><b>بخبرة حقيقية</b></h1>
+          <p class="desc">مطاعم، فنادق، صيدليات، هايبر ماركت، شركات — وأكثر.</p>
+          <div class="stat-row">
+            <div><b>8+</b><span>قطاعات</span></div>
+            <div><b>22+</b><span>نموذج جاهز</span></div>
+            <div><b>50-5000$</b><span>نطاق الأسعار</span></div>
+          </div>
         </div>
       </div>
       <div class="chapter c" id="ch3">
         <div class="box">
-          <div class="eyebrow">// LAUNCH</div>
-          <h1 class="headline">VERTEX<br><b>بانتظارك</b></h1>
-          <a class="cta-btn" href="#">جرب الآن</a>
+          <div class="eyebrow">// تواصل</div>
+          <h1 class="headline">جاهز نبدأ<br><b>مشروعك؟</b></h1>
+          <p class="desc">60 يوم ضمان تقني كامل بعد التسليم، مع دعم فني لمدة سنة.</p>
+          <a class="cta-btn" href="https://wa.me/9647747248826" target="_blank" rel="noopener">تواصل واتساب</a>
         </div>
       </div>
     </div>
@@ -121,28 +128,28 @@
   renderer.setSize(innerWidth, innerHeight);
 
   var scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x050507);
-  scene.fog = new THREE.FogExp2(0x050507, 0.048);
+  scene.background = new THREE.Color(0x08070a);
+  scene.fog = new THREE.FogExp2(0x08070a, 0.046);
 
   var camera = new THREE.PerspectiveCamera(50, innerWidth/innerHeight, 0.1, 100);
   camera.position.set(0,0,6);
 
-  scene.add(new THREE.AmbientLight(0x223344, 0.6));
-  var keyLight = new THREE.PointLight(0x4dfff0, 2, 20);
+  scene.add(new THREE.AmbientLight(0x554433, 0.6));
+  var keyLight = new THREE.PointLight(0xe3b869, 2, 20);
   keyLight.position.set(2,2,4); scene.add(keyLight);
-  var magLight = new THREE.PointLight(0xff4de0, 1.6, 20);
-  magLight.position.set(-3,-1,-2); scene.add(magLight);
+  var blueLight = new THREE.PointLight(0x4a8fd6, 1.4, 20);
+  blueLight.position.set(-3,-1,-2); scene.add(blueLight);
 
-  var cyanMat = new THREE.LineBasicMaterial({color:0x4dfff0, transparent:true, opacity:0.85});
-  var cyanPtMat = new THREE.PointsMaterial({color:0x4dfff0, size:0.06, transparent:true, opacity:0.9});
-  var magPtMat = new THREE.PointsMaterial({color:0xff4de0, size:0.05, transparent:true, opacity:0.8});
+  var goldLineMat = new THREE.LineBasicMaterial({color:0xe3b869, transparent:true, opacity:0.85});
+  var goldPtMat = new THREE.PointsMaterial({color:0xe3b869, size:0.06, transparent:true, opacity:0.9});
+  var bluePtMat = new THREE.PointsMaterial({color:0x4a8fd6, size:0.05, transparent:true, opacity:0.75});
 
-  /* ---- ENV 1: Data Core (z=0) ---- */
+  /* ---- ENV 1: LINKO mark (z=0) ---- */
   var env1 = new THREE.Group();
   var coreGeo = new THREE.IcosahedronGeometry(1.4, 1);
-  var coreWire = new THREE.LineSegments(new THREE.EdgesGeometry(coreGeo), cyanMat);
+  var coreWire = new THREE.LineSegments(new THREE.EdgesGeometry(coreGeo), goldLineMat);
   env1.add(coreWire);
-  var coreInner = new THREE.Mesh(coreGeo, new THREE.MeshBasicMaterial({color:0x0a2a2a, transparent:true, opacity:0.35}));
+  var coreInner = new THREE.Mesh(coreGeo, new THREE.MeshBasicMaterial({color:0x1a140a, transparent:true, opacity:0.4}));
   env1.add(coreInner);
   var orbitPts = [];
   for(var i=0;i<120;i++){
@@ -152,64 +159,75 @@
   }
   var orbitGeo = new THREE.BufferGeometry();
   orbitGeo.setAttribute('position', new THREE.Float32BufferAttribute(orbitPts,3));
-  var orbitCloud = new THREE.Points(orbitGeo, cyanPtMat);
+  var orbitCloud = new THREE.Points(orbitGeo, goldPtMat);
   env1.add(orbitCloud);
   env1.position.z = 0;
   scene.add(env1);
 
-  /* ---- ENV 2: Neural Network (z=-16) ---- */
+  /* ---- ENV 2: Services network (z=-16), 6 nodes = 6 services ---- */
   var env2 = new THREE.Group();
-  var nodeCount = 40, nodes = [];
-  var nodePos = [];
-  for(var i=0;i<nodeCount;i++){
+  var serviceCount = 6, nodes = [], nodePos = [];
+  for(var i=0;i<serviceCount;i++){
+    var ang = (i/serviceCount)*Math.PI*2;
+    var p = new THREE.Vector3(Math.cos(ang)*2.6, Math.sin(ang)*1.7, (Math.random()-.5)*1.5);
+    nodes.push(p); nodePos.push(p.x,p.y,p.z);
+  }
+  // add extra scatter nodes for network density
+  for(var i=0;i<24;i++){
     var p = new THREE.Vector3((Math.random()-.5)*6,(Math.random()-.5)*4,(Math.random()-.5)*4);
-    nodes.push(p);
-    nodePos.push(p.x,p.y,p.z);
+    nodes.push(p); nodePos.push(p.x,p.y,p.z);
   }
   var nodeGeo = new THREE.BufferGeometry();
   nodeGeo.setAttribute('position', new THREE.Float32BufferAttribute(nodePos,3));
-  var nodeCloud = new THREE.Points(nodeGeo, cyanPtMat);
+  var nodeCloud = new THREE.Points(nodeGeo, goldPtMat);
   env2.add(nodeCloud);
   var linePos = [];
-  for(var i=0;i<nodeCount;i++){
-    for(var j=i+1;j<nodeCount;j++){
-      if(nodes[i].distanceTo(nodes[j]) < 1.7){
+  for(var i=0;i<nodes.length;i++){
+    for(var j=i+1;j<nodes.length;j++){
+      if(nodes[i].distanceTo(nodes[j]) < 1.9){
         linePos.push(nodes[i].x,nodes[i].y,nodes[i].z, nodes[j].x,nodes[j].y,nodes[j].z);
       }
     }
   }
   var lineGeo = new THREE.BufferGeometry();
   lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(linePos,3));
-  var netLines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({color:0x2a6f6a, transparent:true, opacity:0.5}));
+  var netLines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({color:0x6f5a2a, transparent:true, opacity:0.5}));
   env2.add(netLines);
   env2.position.z = -16;
   scene.add(env2);
 
-  /* ---- ENV 3: Data Stream (z=-32) ---- */
+  /* ---- ENV 3: Sector shapes (z=-32) ---- */
   var env3 = new THREE.Group();
-  var streamCount = 260;
-  var streamPos = [];
-  var streamSpeeds = [];
-  for(var i=0;i<streamCount;i++){
-    streamPos.push((Math.random()-.5)*10, Math.random()*10-5, -32+(Math.random()-.5)*8);
-    streamSpeeds.push(0.02+Math.random()*0.05);
-  }
-  var streamGeo = new THREE.BufferGeometry();
-  streamGeo.setAttribute('position', new THREE.Float32BufferAttribute(streamPos,3));
-  var streamCloud = new THREE.Points(streamGeo, magPtMat);
-  scene.add(streamCloud);
+  var sectorShapes = [];
+  var shapeDefs = [
+    {geo:new THREE.ConeGeometry(0.4,0.8,4), col:0xe3b869},   // restaurant
+    {geo:new THREE.BoxGeometry(0.6,0.6,0.6), col:0x4a8fd6},   // hotel
+    {geo:new THREE.SphereGeometry(0.4,16,16), col:0xe3b869},  // store
+    {geo:new THREE.CylinderGeometry(0.35,0.35,0.7,8), col:0x4a8fd6}, // pharmacy
+    {geo:new THREE.OctahedronGeometry(0.45), col:0xe3b869},   // hypermarket
+    {geo:new THREE.TorusGeometry(0.35,0.12,8,16), col:0x4a8fd6} // company
+  ];
+  shapeDefs.forEach(function(def, i){
+    var ang = (i/shapeDefs.length)*Math.PI*2;
+    var mesh = new THREE.Mesh(def.geo, new THREE.MeshBasicMaterial({color:def.col, wireframe:true}));
+    mesh.position.set(Math.cos(ang)*2.4, Math.sin(ang)*1.6, (Math.random()-.5)*1.2);
+    env3.add(mesh);
+    sectorShapes.push(mesh);
+  });
+  env3.position.z = -32;
+  scene.add(env3);
 
-  /* ---- ENV 4: Product panel (z=-48) ---- */
+  /* ---- ENV 4: Contact panel (z=-48) ---- */
   var env4 = new THREE.Group();
   var panelGeo = new THREE.PlaneGeometry(3.2,1.9);
-  var panelMat = new THREE.MeshBasicMaterial({color:0x0a1a1c, transparent:true, opacity:0.55, side:THREE.DoubleSide});
+  var panelMat = new THREE.MeshBasicMaterial({color:0x1a140a, transparent:true, opacity:0.55, side:THREE.DoubleSide});
   var panel = new THREE.Mesh(panelGeo, panelMat);
   env4.add(panel);
-  var panelEdge = new THREE.LineSegments(new THREE.EdgesGeometry(panelGeo), cyanMat);
+  var panelEdge = new THREE.LineSegments(new THREE.EdgesGeometry(panelGeo), goldLineMat);
   env4.add(panelEdge);
   for(var i=0;i<6;i++){
     var g = new THREE.IcosahedronGeometry(0.14,0);
-    var m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({color: i%2? 0xff4de0:0x4dfff0}));
+    var m = new THREE.Mesh(g, new THREE.MeshBasicMaterial({color: i%2? 0x4a8fd6:0xe3b869}));
     var ang = (i/6)*Math.PI*2;
     m.position.set(Math.cos(ang)*2.2, Math.sin(ang)*1.3, 0.3);
     env4.add(m);
@@ -239,7 +257,7 @@
       for(var i=0;i<blocks;i++){
         var w=40+Math.random()*260, h=4+Math.random()*24;
         var x=Math.random()*glitch.width, y=Math.random()*glitch.height;
-        gctx.fillStyle = Math.random()>0.5 ? 'rgba(77,255,240,.45)' : 'rgba(255,77,224,.45)';
+        gctx.fillStyle = Math.random()>0.5 ? 'rgba(227,184,105,.5)' : 'rgba(74,143,214,.5)';
         gctx.fillRect(x,y,w,h);
       }
       f++;
@@ -247,14 +265,14 @@
     }, 40);
   }
 
-  /* ---------- scroll-driven camera flight ---------- */
+  /* ---------- scroll-driven camera flight (vanilla, no external deps) ---------- */
   var chapters = document.querySelectorAll('.chapter');
   var dots = document.querySelectorAll('#dots .d');
   var hint = document.getElementById('hint');
   var chapterCenters = [0.08, 0.37, 0.64, 0.93];
   var zStart = 6, zEnd = -52;
-
   var lastChapterShown = -1;
+
   function applyProgress(p){
     var z = zStart + (zEnd-zStart)*p;
     camera.position.z = z;
@@ -280,19 +298,22 @@
       var op = Math.max(0, 1 - d*7);
       ch.style.opacity = op;
     });
-
-    if(!reduced){
-      streamCloud.geometry.attributes.position.array.forEach && null;
-    }
   }
-  applyProgress(0);
 
-  if(window.ScrollTrigger){
-    ScrollTrigger.create({
-      trigger:'#scene-wrap', start:'top top', end:'bottom bottom', scrub:0.5,
-      onUpdate:function(self){ applyProgress(self.progress); }
-    });
+  var wrapEl = document.getElementById('scene-wrap');
+  function computeProgress(){
+    var rect = wrapEl.getBoundingClientRect();
+    var total = wrapEl.offsetHeight - innerHeight;
+    var scrolled = -rect.top;
+    return Math.min(1, Math.max(0, scrolled/total));
   }
+  var ticking = false;
+  addEventListener('scroll', function(){
+    if(ticking) return; ticking = true;
+    requestAnimationFrame(function(){ applyProgress(computeProgress()); ticking = false; });
+  }, {passive:true});
+  addEventListener('resize', function(){ applyProgress(computeProgress()); });
+  applyProgress(computeProgress());
 
   var t = 0;
   function animate(){
@@ -304,15 +325,14 @@
       env2.rotation.y += 0.0008;
       nodeCloud.material.size = 0.06 + Math.sin(t)*0.01;
 
-      var arr = streamGeo.attributes.position.array;
-      for(var i=0;i<streamCount;i++){
-        arr[i*3+1] -= streamSpeeds[i];
-        if(arr[i*3+1] < -5){ arr[i*3+1] = 5; }
-      }
-      streamGeo.attributes.position.needsUpdate = true;
+      sectorShapes.forEach(function(m,i){
+        m.rotation.x += 0.006 + i*0.001;
+        m.rotation.y += 0.008;
+      });
+      env3.rotation.y = Math.sin(t*0.2)*0.1;
 
       env4.rotation.y = Math.sin(t*0.3)*0.15;
-      env4.children.forEach(function(c,i){
+      env4.children.forEach(function(c){
         if(c.geometry && c.geometry.type==='IcosahedronGeometry'){
           c.rotation.x += 0.02; c.rotation.y += 0.015;
         }
